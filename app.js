@@ -43,7 +43,7 @@ app.get('/login', function(req, res) {
   // res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email';
+  var scope = 'user-read-private user-read-email playlist-read-private playlist-read-collaborative';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -93,7 +93,8 @@ app.get('/getTokens/:code', function(req, res) {
         // we can also pass the token to the browser to make requests from there
         res.send({
             access_token: access_token,
-            'refresh_token': refresh_token
+            'refresh_token': refresh_token,
+            'expires_in': body.expires_in
           });
      }
        else {
@@ -123,7 +124,8 @@ app.get('/refresh_token/:refresh_token', function(req, res) {
     if (!error && response.statusCode === 200) {
       var access_token = body.access_token;
       res.send({
-        'access_token': access_token
+        'access_token': access_token,
+        'expires_in': body.expires_in
       });
     }
   });
